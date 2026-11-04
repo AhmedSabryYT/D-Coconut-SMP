@@ -1,17 +1,18 @@
 import { world, system } from "@minecraft/server";
-import { ActionFormData } from "@minecraft/server-ui";
-import { JOBS, getJob, setJob, getMoney, getCoconuts, getBounty } from "./data.js";
+import { getMoney, getCoconuts, getBounty } from "./data.js";
 import { openShop } from "./shop.js";
 import { openCoconutShop } from "./coconutshop.js";
 import { openExchange } from "./exchange.js";
+import { openMainMenu, openJobsMenu } from "./menu.js";
 
 const PREFIX = "!";
 
 const HANDLERS = {
-  "jobs":            openJobs,
-  "shop":            (p) => openShop(p),
-  "coconutshop":     (p) => openCoconutShop(p),
-  "coconutexchange": (p) => openExchange(p),
+  "menu":            openMainMenu,
+  "jobs":            openJobsMenu,
+  "shop":            openShop,
+  "coconutshop":     openCoconutShop,
+  "coconutexchange": openExchange,
   "balance":         showBalance,
   "bal":             showBalance,
   "help":            showHelp,
@@ -32,20 +33,6 @@ export function startCommands() {
   });
 }
 
-async function openJobs(p) {
-  const cur = getJob(p);
-  const form = new ActionFormData()
-    .title("§6Choose Your Job§r")
-    .body(`Current: §b${cur}§r\n\n§7Pick a job to start earning money + coconuts on daily payouts.§r`);
-  for (const j of JOBS) form.button(j === cur ? `§a✓ ${j}§r` : j);
-  form.button("§cClose§r");
-  const res = await form.show(p);
-  if (res.canceled || res.selection === undefined || res.selection === JOBS.length) return;
-  const picked = JOBS[res.selection];
-  setJob(p, picked);
-  p.sendMessage(`§aJob set to §b${picked}§r`);
-}
-
 function showBalance(p) {
   p.sendMessage(`§eMoney: §a$${getMoney(p)}§r §7|§r §6🥥 ${getCoconuts(p)}§r §7|§r §c⚔ bounty ${getBounty(p)}§r`);
 }
@@ -53,9 +40,11 @@ function showBalance(p) {
 function showHelp(p) {
   p.sendMessage([
     "§6§lD-Coconut Commands§r",
+    "§7Tip: tap your §6D-Coconut Menu§7 compass for the full UI.§r",
+    "§e!menu§r — open the main menu",
     "§e!jobs§r — pick your job",
-    "§e!shop§r — buy items w/ money",
-    "§e!coconutshop§r — buy lootboxes w/ coconuts",
+    "§e!shop§r — money shop",
+    "§e!coconutshop§r — coconut lootboxes",
     "§e!coconutexchange§r — convert coconuts → money",
     "§e!balance§r — show your money / coconuts / bounty",
     "§e!help§r — this menu",
