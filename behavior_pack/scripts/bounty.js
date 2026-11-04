@@ -1,4 +1,4 @@
-import { world, system, EntityDamageCause } from "@minecraft/server";
+import { world, system } from "@minecraft/server";
 import {
   getBounty, setBounty, addBounty,
   addMoney,

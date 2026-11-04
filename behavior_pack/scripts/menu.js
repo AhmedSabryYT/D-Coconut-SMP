@@ -1,4 +1,4 @@
-import { world, system, ItemStack, ItemLockMode } from "@minecraft/server";
+import { world, system, ItemStack } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { JOBS, getJob, setJob, getMoney, getCoconuts, getBounty } from "./data.js";
 import { openShop } from "./shop.js";
@@ -19,7 +19,7 @@ export function giveMenuItem(p) {
     const compass = new ItemStack(MENU_ITEM_ID, 1);
     compass.nameTag = MENU_ITEM_NAME;
     try { compass.setLore(["§7Tap to open the", "§7D-Coconut menu"]); } catch (_) {}
-    try { compass.lockMode = ItemLockMode.inventory; } catch (_) {}
+    try { compass.lockMode = "inventory"; } catch (_) {}
     try { compass.keepOnDeath = true; } catch (_) {}
     inv.addItem(compass);
   } catch (_) {}
