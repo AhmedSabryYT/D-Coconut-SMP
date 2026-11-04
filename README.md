@@ -62,7 +62,7 @@ Slider UI to convert coconuts → money at **1🥥 = $3** with a confirmation pr
 
 ## Installation
 
-1. Download the latest `.mcaddon` from the [Releases](../../releases) or the `builds/` folder
+1. Download the latest `.mcaddon` from the [Releases](../../releases) or the `releases/` folder
 2. Open it with Minecraft (tap it on mobile, double-click on PC)
 3. Create or edit a world → **Behavior Packs** + **Resource Packs** → activate both `D-Coconut SMP` packs
 4. In **Experiments**, enable **Beta APIs** (required for the Script API)
@@ -94,7 +94,7 @@ D-Coconut/
 │   └── textures/
 │       ├── item_texture.json
 │       └── items/coconut.png
-└── builds/
+└── releases/
     ├── DCoconut_v0.1.0.mcaddon
     ├── DCoconut_BP_v0.1.0.mcpack
     └── DCoconut_RP_v0.1.0.mcpack
