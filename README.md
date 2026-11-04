@@ -2,7 +2,7 @@
 
 > Minecraft Bedrock add-on for the **D-Coconut SMP** — economy, bounties, jobs, lootboxes, and shops. All running on the Script API.
 
-**Latest version:** `v0.1.1`
+**Latest version:** `v0.1.2`
 
 ---
 
@@ -97,18 +97,25 @@ D-Coconut/
 │       ├── item_texture.json
 │       └── items/coconut.png
 └── releases/
-    ├── DCoconut_v0.1.1.mcaddon
-    ├── DCoconut_BP_v0.1.1.mcpack
-    └── DCoconut_RP_v0.1.1.mcpack
+    ├── DCoconut_v0.1.2.mcaddon
+    ├── DCoconut_BP_v0.1.2.mcpack
+    └── DCoconut_RP_v0.1.2.mcpack
 ```
 
 ---
 
 ## Changelog
 
+### v0.1.2 — 2026-11-04
+**Hotfix for v0.1.1** — commands wouldn't register because:
+- Script imported `CommandPermissionLevel`, which doesn't exist in `@minecraft/server` 2.x — correct enum is `CustomCommandPermissionLevel`. The bad import silently broke the whole module → no commands registered.
+- Manifest declared `"@minecraft/server": "2.0.0-beta"` but the stable version string is just `2.0.0`. With the `-beta` suffix the dependency didn't resolve.
+
+Both fixed → `/dc:jobs`, `/dc:shop`, `/dc:coconutshop`, `/dc:coconutexchange`, `/dc:balance`, `/dc:help` now actually show up in chat autocomplete.
+
 ### v0.1.1 — 2026-11-04
-- **Real slash commands** via the Custom Commands API — `/dc:jobs`, `/dc:shop`, `/dc:coconutshop`, `/dc:coconutexchange`, `/dc:balance`, `/dc:help` now have proper autocomplete in chat
-- Upgraded `@minecraft/server` to `2.0.0-beta`
+- **Real slash commands** via the Custom Commands API — `/dc:jobs`, `/dc:shop`, `/dc:coconutshop`, `/dc:coconutexchange`, `/dc:balance`, `/dc:help` with autocomplete in chat
+- Upgraded `@minecraft/server` to `2.0.0-beta` (⚠️ this was wrong — see v0.1.2)
 - Bumped minimum engine version to **1.21.80**
 - Dropped the old `chatSend` interceptor (slash commands don't fire that event — that's why `/jobs` wasn't opening anything in v0.1.0)
 
@@ -128,7 +135,7 @@ Initial release.
 
 - Minecraft Bedrock Edition **1.21.80+**
 - **Beta APIs** experiment enabled (required for Custom Commands API)
-- `@minecraft/server` 2.0.0-beta
+- `@minecraft/server` 2.0.0
 - `@minecraft/server-ui` 1.3.0
 
 ---

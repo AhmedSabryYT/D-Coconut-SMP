@@ -1,4 +1,4 @@
-import { system, CommandPermissionLevel, CustomCommandStatus } from "@minecraft/server";
+import { system, CustomCommandPermissionLevel, CustomCommandStatus } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { JOBS, getJob, setJob, getMoney, getCoconuts, getBounty } from "./data.js";
 import { openShop } from "./shop.js";
@@ -24,7 +24,7 @@ export function registerCommands() {
     const reg = init.customCommandRegistry;
 
     reg.registerCommand(
-      { name: "dc:jobs", description: "Pick or change your job", permissionLevel: CommandPermissionLevel.Any },
+      { name: "dc:jobs", description: "Pick or change your job", permissionLevel: CustomCommandPermissionLevel.Any },
       (origin) => {
         const r = requirePlayer(origin); if (!r.ok) return r.res;
         defer(() => openJobs(r.player));
@@ -33,7 +33,7 @@ export function registerCommands() {
     );
 
     reg.registerCommand(
-      { name: "dc:shop", description: "Open the money shop", permissionLevel: CommandPermissionLevel.Any },
+      { name: "dc:shop", description: "Open the money shop", permissionLevel: CustomCommandPermissionLevel.Any },
       (origin) => {
         const r = requirePlayer(origin); if (!r.ok) return r.res;
         defer(() => openShop(r.player));
@@ -42,7 +42,7 @@ export function registerCommands() {
     );
 
     reg.registerCommand(
-      { name: "dc:coconutshop", description: "Open the coconut lootbox shop", permissionLevel: CommandPermissionLevel.Any },
+      { name: "dc:coconutshop", description: "Open the coconut lootbox shop", permissionLevel: CustomCommandPermissionLevel.Any },
       (origin) => {
         const r = requirePlayer(origin); if (!r.ok) return r.res;
         defer(() => openCoconutShop(r.player));
@@ -51,7 +51,7 @@ export function registerCommands() {
     );
 
     reg.registerCommand(
-      { name: "dc:coconutexchange", description: "Exchange coconuts for money", permissionLevel: CommandPermissionLevel.Any },
+      { name: "dc:coconutexchange", description: "Exchange coconuts for money", permissionLevel: CustomCommandPermissionLevel.Any },
       (origin) => {
         const r = requirePlayer(origin); if (!r.ok) return r.res;
         defer(() => openExchange(r.player));
@@ -60,7 +60,7 @@ export function registerCommands() {
     );
 
     reg.registerCommand(
-      { name: "dc:balance", description: "Show your money, coconuts, and bounty", permissionLevel: CommandPermissionLevel.Any },
+      { name: "dc:balance", description: "Show your money, coconuts, and bounty", permissionLevel: CustomCommandPermissionLevel.Any },
       (origin) => {
         const r = requirePlayer(origin); if (!r.ok) return r.res;
         const p = r.player;
@@ -70,7 +70,7 @@ export function registerCommands() {
     );
 
     reg.registerCommand(
-      { name: "dc:help", description: "List D-Coconut commands", permissionLevel: CommandPermissionLevel.Any },
+      { name: "dc:help", description: "List D-Coconut commands", permissionLevel: CustomCommandPermissionLevel.Any },
       (origin) => {
         const r = requirePlayer(origin); if (!r.ok) return r.res;
         const p = r.player;
