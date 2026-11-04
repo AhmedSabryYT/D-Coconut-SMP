@@ -15,7 +15,7 @@ world.afterEvents.playerSpawn.subscribe((ev) => {
       p.sendMessage([
         "§6§lWelcome to D-Coconut SMP§r",
         "§7Tap the §6D-Coconut Menu§7 compass in your hotbar to open the main menu.§r",
-        "§7Or type §e!help§7 in chat for every command.§r",
+        "§7Or type §e/dc:§7 in chat to see every command in autocomplete.§r",
       ].join("\n"));
     } catch (_) {}
   }

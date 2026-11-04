@@ -2,7 +2,7 @@
 
 > Minecraft Bedrock add-on for the **D-Coconut SMP** — economy, bounties, jobs, lootboxes, and shops. All running on the Script API.
 
-**Latest version:** `v0.3.0`
+**Latest version:** `v0.4.0`
 
 ---
 
@@ -49,19 +49,22 @@ Slider UI to convert coconuts → money at **1🥥 = $3** with a confirmation pr
 
 ## How players interact
 
-Every player gets a **§6D-Coconut Menu§r compass** in their hotbar on first join (locked to inventory, kept on death). Tap/hold it and the main menu UI opens with buttons for Shop, Coconut Shop, Jobs, Exchange, Balance, and Help.
+Three equivalent ways to open the economy — pick whichever feels natural:
 
-Chat commands work too (`!` prefix, not `/`):
+1. **🧭 D-Coconut Menu compass** — every player gets one on first join (locked to inventory, kept on death). Tap/hold it to open the main menu hub.
+2. **Slash commands with autocomplete** — type `/dc:` in chat and the list pops up:
 
-| Command | What it does |
-|---------|--------------|
-| `!menu`             | Open the main menu (same as tapping the compass) |
-| `!jobs`             | Pick/change your job |
-| `!shop`             | Open the money shop |
-| `!coconutshop`      | Open the coconut lootbox shop |
-| `!coconutexchange`  | Convert coconuts into money |
-| `!balance`          | Show your money / coconuts / bounty |
-| `!help`             | List all D-Coconut commands |
+   | Command | What it does |
+   |---------|--------------|
+   | `/dc:menu`             | Open the main menu |
+   | `/dc:jobs`             | Pick/change your job |
+   | `/dc:shop`             | Open the money shop |
+   | `/dc:coconutshop`      | Open the coconut lootbox shop |
+   | `/dc:coconutexchange`  | Convert coconuts into money |
+   | `/dc:balance`          | Show your money / coconuts / bounty |
+   | `/dc:help`             | List all D-Coconut commands |
+
+3. **`!` chat shortcuts** — same names without the `dc:` namespace (e.g. `!shop`, `!jobs`, `!menu`). Keeps working as a backup.
 
 ---
 
@@ -100,14 +103,19 @@ D-Coconut/
 │       ├── item_texture.json
 │       └── items/coconut.png
 └── releases/
-    ├── DCoconut_v0.3.0.mcaddon
-    ├── DCoconut_BP_v0.3.0.mcpack
-    └── DCoconut_RP_v0.3.0.mcpack
+    ├── DCoconut_v0.4.0.mcaddon
+    ├── DCoconut_BP_v0.4.0.mcpack
+    └── DCoconut_RP_v0.4.0.mcpack
 ```
 
 ---
 
 ## Changelog
+
+### v0.4.0 — 2026-11-04
+- **Real `/dc:*` slash commands with chat autocomplete** are back — type `/dc:` and the list pops up. The v0.1.x attempts failed because of implementation bugs, not the module version. A working third-party mod (TournamentPVP) showed the right pattern: raw numeric `permissionLevel: 0`, no `CommandPermissionLevel` enum import, callback returns nothing, defer real work with `system.run(...)`.
+- Bumped `@minecraft/server` to `2.1.0` and `min_engine_version` to `1.21.80`.
+- **Kept the menu compass AND `!` chat prefix** — now any new player can discover commands via autocomplete, chat, OR their compass. Triple-redundant.
 
 ### v0.3.0 — 2026-11-04
 - **Menu compass** 🧭 — every player gets a renamed `minecraft:compass` ("§6D-Coconut Menu§r") on first spawn and on every respawn. Locked to inventory and kept on death so players can't lose it. Tap/hold it to open the main menu hub.
@@ -153,9 +161,9 @@ Initial release.
 
 ## Requirements
 
-- Minecraft Bedrock Edition **1.21.50+**
-- **Beta APIs** experiment enabled
-- `@minecraft/server` 1.17.0
+- Minecraft Bedrock Edition **1.21.80+**
+- **Beta APIs** experiment enabled (required for Custom Commands API)
+- `@minecraft/server` 2.1.0
 - `@minecraft/server-ui` 1.3.0
 
 ---
