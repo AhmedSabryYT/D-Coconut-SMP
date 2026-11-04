@@ -1,90 +1,34 @@
-import { system, CommandPermissionLevel, CustomCommandStatus } from "@minecraft/server";
+import { world, system } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { JOBS, getJob, setJob, getMoney, getCoconuts, getBounty } from "./data.js";
 import { openShop } from "./shop.js";
 import { openCoconutShop } from "./coconutshop.js";
 import { openExchange } from "./exchange.js";
 
-function playerFromOrigin(origin) {
-  const e = origin?.sourceEntity;
-  if (e && e.typeId === "minecraft:player") return e;
-  return null;
-}
+const PREFIX = "!";
 
-function requirePlayer(origin) {
-  const p = playerFromOrigin(origin);
-  if (!p) return { ok: false, res: { status: CustomCommandStatus.Failure, message: "Only players can run this." } };
-  return { ok: true, player: p };
-}
+const HANDLERS = {
+  "jobs":            openJobs,
+  "shop":            (p) => openShop(p),
+  "coconutshop":     (p) => openCoconutShop(p),
+  "coconutexchange": (p) => openExchange(p),
+  "balance":         showBalance,
+  "bal":             showBalance,
+  "help":            showHelp,
+  "dchelp":          showHelp,
+};
 
-function defer(fn) { system.run(fn); }
-
-export function registerCommands() {
-  system.beforeEvents.startup.subscribe((init) => {
-    const reg = init.customCommandRegistry;
-
-    reg.registerCommand(
-      { name: "dc:jobs", description: "Pick or change your job", permissionLevel: CommandPermissionLevel.Any },
-      (origin) => {
-        const r = requirePlayer(origin); if (!r.ok) return r.res;
-        defer(() => openJobs(r.player));
-        return { status: CustomCommandStatus.Success };
-      }
-    );
-
-    reg.registerCommand(
-      { name: "dc:shop", description: "Open the money shop", permissionLevel: CommandPermissionLevel.Any },
-      (origin) => {
-        const r = requirePlayer(origin); if (!r.ok) return r.res;
-        defer(() => openShop(r.player));
-        return { status: CustomCommandStatus.Success };
-      }
-    );
-
-    reg.registerCommand(
-      { name: "dc:coconutshop", description: "Open the coconut lootbox shop", permissionLevel: CommandPermissionLevel.Any },
-      (origin) => {
-        const r = requirePlayer(origin); if (!r.ok) return r.res;
-        defer(() => openCoconutShop(r.player));
-        return { status: CustomCommandStatus.Success };
-      }
-    );
-
-    reg.registerCommand(
-      { name: "dc:coconutexchange", description: "Exchange coconuts for money", permissionLevel: CommandPermissionLevel.Any },
-      (origin) => {
-        const r = requirePlayer(origin); if (!r.ok) return r.res;
-        defer(() => openExchange(r.player));
-        return { status: CustomCommandStatus.Success };
-      }
-    );
-
-    reg.registerCommand(
-      { name: "dc:balance", description: "Show your money, coconuts, and bounty", permissionLevel: CommandPermissionLevel.Any },
-      (origin) => {
-        const r = requirePlayer(origin); if (!r.ok) return r.res;
-        const p = r.player;
-        defer(() => p.sendMessage(`§eMoney: §a$${getMoney(p)}§r §7|§r §6🥥 ${getCoconuts(p)}§r §7|§r §c⚔ bounty ${getBounty(p)}§r`));
-        return { status: CustomCommandStatus.Success };
-      }
-    );
-
-    reg.registerCommand(
-      { name: "dc:help", description: "List D-Coconut commands", permissionLevel: CommandPermissionLevel.Any },
-      (origin) => {
-        const r = requirePlayer(origin); if (!r.ok) return r.res;
-        const p = r.player;
-        defer(() => p.sendMessage([
-          "§6§lD-Coconut Commands§r",
-          "§e/dc:jobs§r — pick your job",
-          "§e/dc:shop§r — buy items w/ money",
-          "§e/dc:coconutshop§r — buy lootboxes w/ coconuts",
-          "§e/dc:coconutexchange§r — convert coconuts → money",
-          "§e/dc:balance§r — show balance",
-        ].join("\n")));
-        return { status: CustomCommandStatus.Success };
-      }
-    );
+export function startCommands() {
+  world.beforeEvents.chatSend.subscribe((ev) => {
+    const msg = ev.message.trim();
+    if (!msg.startsWith(PREFIX)) return;
+    const [raw, ...args] = msg.slice(PREFIX.length).split(/\s+/);
+    const cmd = raw.toLowerCase();
+    const fn = HANDLERS[cmd];
+    if (!fn) return;
+    ev.cancel = true;
+    const sender = ev.sender;
+    system.run(() => fn(sender, args));
   });
 }
 
@@ -100,4 +44,20 @@ async function openJobs(p) {
   const picked = JOBS[res.selection];
   setJob(p, picked);
   p.sendMessage(`§aJob set to §b${picked}§r`);
+}
+
+function showBalance(p) {
+  p.sendMessage(`§eMoney: §a$${getMoney(p)}§r §7|§r §6🥥 ${getCoconuts(p)}§r §7|§r §c⚔ bounty ${getBounty(p)}§r`);
+}
+
+function showHelp(p) {
+  p.sendMessage([
+    "§6§lD-Coconut Commands§r",
+    "§e!jobs§r — pick your job",
+    "§e!shop§r — buy items w/ money",
+    "§e!coconutshop§r — buy lootboxes w/ coconuts",
+    "§e!coconutexchange§r — convert coconuts → money",
+    "§e!balance§r — show your money / coconuts / bounty",
+    "§e!help§r — this menu",
+  ].join("\n"));
 }
