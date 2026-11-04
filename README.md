@@ -2,7 +2,7 @@
 
 > Minecraft Bedrock add-on for the **D-Coconut SMP** — economy, bounties, jobs, lootboxes, and shops. All running on the Script API.
 
-**Latest version:** `v0.1.0`
+**Latest version:** `v0.1.1`
 
 ---
 
@@ -22,11 +22,11 @@ A Behavior Pack + Resource Pack that bolts a full RPG-style economy onto any Bed
 - High bounty = **job payout multiplier** (up to **x2** at 1000+ bounty)
 
 ### Jobs
-- Pick via `/jobs`: `miner`, `lumberjack`, `farmer`, `fisher`, `hunter`
+- Pick via `/dc:jobs`: `miner`, `lumberjack`, `farmer`, `fisher`, `hunter`
 - Each job tracks relevant work (mining ores, chopping logs, harvesting crops, hunting mobs)
 - At the end of every Minecraft day → automatic payout: **$5 + 1🥥 per action**, scaled by bounty
 
-### Coconut shop (`/coconutshop`)
+### Coconut shop (`/dc:coconutshop`)
 Spend coconuts on lootboxes with weighted loot tables:
 
 | Tier | Price | Rolls | Rare bias |
@@ -39,24 +39,26 @@ Spend coconuts on lootboxes with weighted loot tables:
 
 Pool includes diamonds, netherite ingots, elytras, nether stars, shulker shells, totems, enchanted golden apples. **Dragon egg never drops** (admin-only).
 
-### Money shop (`/shop`)
+### Money shop (`/dc:shop`)
 Buy items with money, priced by value. Admin items (dragon egg, bedrock, command blocks, barrier, structure blocks) are banned.
 
-### Coconut exchange (`/coconutexchange`)
+### Coconut exchange (`/dc:coconutexchange`)
 Slider UI to convert coconuts → money at **1🥥 = $3** with a confirmation preview.
 
 ---
 
 ## Commands
 
+All commands are real slash commands with autocomplete — type `/dc:` in chat to see them pop up.
+
 | Command | What it does |
 |---------|--------------|
-| `/jobs`              | Pick/change your job |
-| `/shop`              | Open the money shop |
-| `/coconutshop`       | Open the coconut lootbox shop |
-| `/coconutexchange`   | Convert coconuts into money |
-| `/balance` or `/bal` | Show your money / coconuts / bounty |
-| `/dchelp`            | List all D-Coconut commands |
+| `/dc:jobs`             | Pick/change your job |
+| `/dc:shop`             | Open the money shop |
+| `/dc:coconutshop`      | Open the coconut lootbox shop |
+| `/dc:coconutexchange`  | Convert coconuts into money |
+| `/dc:balance`          | Show your money / coconuts / bounty |
+| `/dc:help`             | List all D-Coconut commands |
 
 ---
 
@@ -83,7 +85,7 @@ D-Coconut/
 │       ├── hud.js           ← action-bar HUD renderer
 │       ├── bounty.js        ← failed-attempt tracking + rewards
 │       ├── jobs.js          ← work tracking + daily payout
-│       ├── commands.js      ← chat command router
+│       ├── commands.js      ← slash command registry (/dc:*)
 │       ├── shop.js          ← /shop UI + catalog
 │       ├── coconutshop.js   ← /coconutshop lootboxes
 │       └── exchange.js      ← /coconutexchange
@@ -95,14 +97,20 @@ D-Coconut/
 │       ├── item_texture.json
 │       └── items/coconut.png
 └── releases/
-    ├── DCoconut_v0.1.0.mcaddon
-    ├── DCoconut_BP_v0.1.0.mcpack
-    └── DCoconut_RP_v0.1.0.mcpack
+    ├── DCoconut_v0.1.1.mcaddon
+    ├── DCoconut_BP_v0.1.1.mcpack
+    └── DCoconut_RP_v0.1.1.mcpack
 ```
 
 ---
 
 ## Changelog
+
+### v0.1.1 — 2026-11-04
+- **Real slash commands** via the Custom Commands API — `/dc:jobs`, `/dc:shop`, `/dc:coconutshop`, `/dc:coconutexchange`, `/dc:balance`, `/dc:help` now have proper autocomplete in chat
+- Upgraded `@minecraft/server` to `2.0.0-beta`
+- Bumped minimum engine version to **1.21.80**
+- Dropped the old `chatSend` interceptor (slash commands don't fire that event — that's why `/jobs` wasn't opening anything in v0.1.0)
 
 ### v0.1.0 — 2026-11-04
 Initial release.
@@ -118,9 +126,9 @@ Initial release.
 
 ## Requirements
 
-- Minecraft Bedrock Edition **1.21.50+**
-- **Beta APIs** experiment enabled
-- `@minecraft/server` 1.17.0
+- Minecraft Bedrock Edition **1.21.80+**
+- **Beta APIs** experiment enabled (required for Custom Commands API)
+- `@minecraft/server` 2.0.0-beta
 - `@minecraft/server-ui` 1.3.0
 
 ---
