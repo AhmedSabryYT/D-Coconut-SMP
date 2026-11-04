@@ -2,7 +2,7 @@
 
 > Minecraft Bedrock add-on for the **D-Coconut SMP** — economy, bounties, jobs, lootboxes, and shops. All running on the Script API.
 
-**Latest version:** `v0.1.2`
+**Latest version:** `v0.1.3`
 
 ---
 
@@ -97,25 +97,28 @@ D-Coconut/
 │       ├── item_texture.json
 │       └── items/coconut.png
 └── releases/
-    ├── DCoconut_v0.1.2.mcaddon
-    ├── DCoconut_BP_v0.1.2.mcpack
-    └── DCoconut_RP_v0.1.2.mcpack
+    ├── DCoconut_v0.1.3.mcaddon
+    ├── DCoconut_BP_v0.1.3.mcpack
+    └── DCoconut_RP_v0.1.3.mcpack
 ```
 
 ---
 
 ## Changelog
 
-### v0.1.2 — 2026-11-04
-**Hotfix for v0.1.1** — commands wouldn't register because:
-- Script imported `CommandPermissionLevel`, which doesn't exist in `@minecraft/server` 2.x — correct enum is `CustomCommandPermissionLevel`. The bad import silently broke the whole module → no commands registered.
-- Manifest declared `"@minecraft/server": "2.0.0-beta"` but the stable version string is just `2.0.0`. With the `-beta` suffix the dependency didn't resolve.
+### v0.1.3 — 2026-11-04
+**Real hotfix** — cross-referenced against [Microsoft's official custom-commands sample](https://github.com/microsoft/minecraft-scripting-samples/tree/main/custom-commands) and found two issues with v0.1.2:
+- Correct enum is `CommandPermissionLevel` — NOT `CustomCommandPermissionLevel`. The Microsoft docs page is wrong but the working sample uses `CommandPermissionLevel`. v0.1.2 followed the broken docs.
+- The stable `@minecraft/server` version that actually ships Custom Commands is **`"2.1.0"`**, not `"2.0.0"`. v0.1.1 used `"2.0.0-beta"` (invalid), v0.1.2 used `"2.0.0"` (too low), v0.1.3 uses `"2.1.0"` (matches MS sample).
 
-Both fixed → `/dc:jobs`, `/dc:shop`, `/dc:coconutshop`, `/dc:coconutexchange`, `/dc:balance`, `/dc:help` now actually show up in chat autocomplete.
+Commands should now appear in chat autocomplete for real this time.
+
+### v0.1.2 — 2026-11-04
+Attempted hotfix for v0.1.1 that didn't work — changed enum to `CustomCommandPermissionLevel` (wrong, the docs lied) and server version to `"2.0.0"` (too low for Custom Commands). Superseded by v0.1.3.
 
 ### v0.1.1 — 2026-11-04
 - **Real slash commands** via the Custom Commands API — `/dc:jobs`, `/dc:shop`, `/dc:coconutshop`, `/dc:coconutexchange`, `/dc:balance`, `/dc:help` with autocomplete in chat
-- Upgraded `@minecraft/server` to `2.0.0-beta` (⚠️ this was wrong — see v0.1.2)
+- Upgraded `@minecraft/server` to `2.0.0-beta` (⚠️ this was wrong — see v0.1.3)
 - Bumped minimum engine version to **1.21.80**
 - Dropped the old `chatSend` interceptor (slash commands don't fire that event — that's why `/jobs` wasn't opening anything in v0.1.0)
 
@@ -135,7 +138,7 @@ Initial release.
 
 - Minecraft Bedrock Edition **1.21.80+**
 - **Beta APIs** experiment enabled (required for Custom Commands API)
-- `@minecraft/server` 2.0.0
+- `@minecraft/server` 2.1.0
 - `@minecraft/server-ui` 1.3.0
 
 ---
